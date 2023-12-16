@@ -1,0 +1,14 @@
+.jobs_container {
+  display: grid;
+  gap: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  margin-bottom: 64px;
+}
+
+.btn {
+  background-color: black;
+  padding: 14px 24px;
+  color: white;
+  font-size: 18px;
+  border-radius: 8px;
+}

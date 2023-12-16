@@ -1,0 +1,11 @@
+.page_title_skeleton {
+  height: 60px;
+  width: 350px;
+  background-color: rgba(130, 130, 130, 0.2);
+  margin-bottom: 64px;
+  border-radius: 8px;
+}
+.title {
+  font-size: 48px;
+  margin-bottom: 64px;
+}

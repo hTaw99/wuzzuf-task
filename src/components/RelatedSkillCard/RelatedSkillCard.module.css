@@ -1,0 +1,48 @@
+.container {
+  background-color: #f0f0f0;
+  padding: 32px;
+  margin-bottom: 40px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.btn {
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  text-transform: capitalize;
+  font-size: 18px;
+  text-decoration: underline;
+}
+
+.related-skills_paragraph {
+  margin-bottom: 16px;
+  font-size: 18px;
+}
+
+.related-skills_container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.skills {
+  background-color: #c4c4c4;
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.importance_container {
+  display: flex;
+  width: 75%;
+  justify-content: space-between;
+  align-items: center;
+}

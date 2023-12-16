@@ -1,0 +1,10 @@
+.title {
+  font-size: 48px;
+  margin-bottom: 64px;
+}
+
+.jobs_container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}

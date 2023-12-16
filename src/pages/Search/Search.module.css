@@ -1,0 +1,12 @@
+.title {
+  font-size: 48px;
+  margin-bottom: 64px;
+}
+
+.container {
+  display: grid;
+  gap: 40px;
+  grid-template-columns: 2fr 1fr;
+  height: 100%;
+  /* background-color: blue; */
+}

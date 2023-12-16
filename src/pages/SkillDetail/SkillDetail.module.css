@@ -1,0 +1,15 @@
+.container {
+  display: grid;
+  gap: 40px;
+  grid-template-columns: 2fr 1fr;
+}
+
+.related-skills_container {
+  background-color: white;
+  padding: 32px;
+}
+
+.related-jobs_container {
+  background-color: #d9d9d9;
+  padding: 24px;
+}
