@@ -7,41 +7,9 @@ import {
 import { getSkillsByIds } from "@/api/apiClient";
 import { RootState } from "..";
 import { fetchAllJobs, fetchJobsByIds } from "./jobsEntitySlice";
+import { TSingleSkill, TSkillEntity } from "@/types/skillTypes";
 
 // ----------------------------------------------------------------------
-type TSkill = {
-  data: {
-    skill: {
-      id: string;
-      type: string;
-      attributes: {
-        name: string;
-        type: string;
-        importance: number;
-        level: number;
-      };
-      relationships: {
-        jobs: { id: string }[];
-        skills: { id: string }[];
-      };
-    };
-  };
-};
-
-type TSkillEntity = {
-  id: string;
-  type: string;
-  attributes: {
-    name: string;
-    type: string;
-    importance: number;
-    level: number;
-  };
-  relationships: {
-    jobs: string[]; // was {};
-    skills: string[]; // was {};
-  };
-};
 
 const skillsAdapter = createEntityAdapter<TSkillEntity>({});
 
@@ -64,12 +32,12 @@ const skillsAdapter = createEntityAdapter<TSkillEntity>({});
 //   }
 // );
 
-export const fetchSkillsByIds = createAsyncThunk(
+export const fetchSkillsByIds = createAsyncThunk<TSingleSkill[], string[]>(
   "skill/fetchSkillsByIds",
-  async (skillId: string[], { rejectWithValue }) => {
+  async (skillId, { rejectWithValue }) => {
     try {
       const skills = await getSkillsByIds(skillId);
-      return skills as TSkill[];
+      return skills;
     } catch (err) {
       const errorObject: { message: string; stack: string } = err as {
         message: string;

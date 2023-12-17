@@ -1,4 +1,3 @@
-import RelatedSkillCard from "@/components/RelatedSkillCard";
 import Styles from "./JobDetail.module.css";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
@@ -12,6 +11,7 @@ import { setAsViewedJob } from "@/store/features/searchSlice";
 import PageTitle from "@/components/utilities/PageTitle";
 import PageLeftContainer from "@/components/utilities/PageLeftContainer";
 import PageRightContainer from "@/components/utilities/PageRightContainer";
+import RelatedCard from "@/components/utilities/RelatedCard";
 
 export default function JobDetailPage() {
   const { id } = useParams();
@@ -54,7 +54,8 @@ export default function JobDetailPage() {
       <div className={Styles.container}>
         <PageLeftContainer containerTitle="Related Skills:">
           {job?.skillsId?.map((skillId) => (
-            <RelatedSkillCard skillId={skillId} />
+            <RelatedCard forSkillOrJob="skill" dataId={skillId} />
+            // <RelatedSkillCard skillId={skillId} />
           ))}
         </PageLeftContainer>
         <PageRightContainer containerTitle="Related Jobs:" />

@@ -7,34 +7,10 @@ import {
 import { getAllJobs, getJobsByIds } from "@/api/apiClient";
 import { RootState } from "..";
 import { fetchSkillsByIds } from "./skillSlice";
+import { TData, TJobEntity, TMeta, TSingleJob } from "@/types/jobsTypes";
 
 // ----------------------------------------------------------------------------
 const jobsAdapter = createEntityAdapter<TJobEntity>({});
-
-type TJob = {
-  attributes: { title: string };
-  id: string;
-  relationships: { skills: { id: string }[] };
-  type: string;
-};
-type TData = {
-  data: {
-    jobs: TJob[];
-    meta: TMeta;
-  };
-};
-type TMeta = {
-  next: number;
-  count: number;
-};
-
-type TJobEntity = {
-  id: string;
-  title: string;
-  skillsId: string[];
-  type: string;
-};
-
 type InitialState = {
   error: unknown;
   statusForAllJobs: "idle" | "success" | "loading" | "failed";
@@ -57,29 +33,26 @@ const initialState: InitialState = {
 };
 
 // ----------------------------------------------------------------------
-export const fetchAllJobs = createAsyncThunk(
-  "jobsEntity/fetchAllJobs",
-  async (
-    { limit, cursor }: { limit: number; cursor: number },
-    { rejectWithValue }
-  ) => {
-    try {
-      // ==============================================================
-      const data = await getAllJobs<TData>({ limit, cursor });
-      return data;
-      // ==============================================================
-    } catch (err) {
-      // ==============================================================
-      const errorObject: { message: string; stack: string } = err as {
-        message: string;
-        stack: string;
-      };
-      const message = errorObject?.message;
-      return rejectWithValue(message);
-      // ==============================================================
-    }
+export const fetchAllJobs = createAsyncThunk<
+  TData,
+  { limit: number; cursor: number }
+>("jobsEntity/fetchAllJobs", async ({ limit, cursor }, { rejectWithValue }) => {
+  try {
+    // ==============================================================
+    const data = await getAllJobs<TData>({ limit, cursor });
+    return data;
+    // ==============================================================
+  } catch (err) {
+    // ==============================================================
+    const errorObject: { message: string; stack: string } = err as {
+      message: string;
+      stack: string;
+    };
+    const message = errorObject?.message;
+    return rejectWithValue(message);
+    // ==============================================================
   }
-);
+});
 
 // export const fetchSingleJob = createAsyncThunk(
 //   "jobsEntity/fetchSingleJob",
@@ -102,13 +75,13 @@ export const fetchAllJobs = createAsyncThunk(
 //   }
 // );
 
-export const fetchJobsByIds = createAsyncThunk(
+export const fetchJobsByIds = createAsyncThunk<TSingleJob[], string[]>(
   "jobsEntity/fetchJobsByIds",
-  async (jobsIds: string[], { rejectWithValue }) => {
+  async (jobsIds, { rejectWithValue }) => {
     try {
       // ==============================================================
       const data = await getJobsByIds(jobsIds);
-      return data as { data: { job: TJob } }[];
+      return data;
       // ==============================================================
     } catch (err) {
       // ==============================================================

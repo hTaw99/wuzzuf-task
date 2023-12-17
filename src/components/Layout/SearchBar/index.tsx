@@ -1,24 +1,20 @@
 import SearchIcon from "@/assets/icons/SearchIcon";
 import Styles from "./Searchbar.module.css";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
 import SuggestionList from "@/components/SuggestionList";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import {
-  clearSuggestion,
   closeSuggestionList,
-  fetchSearchedJobs,
   openSuggestionList,
   setQueryKeyword,
 } from "@/store/features/searchSlice";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
-import useDebounce from "@/hooks/useDebounce";
 
 export default function Searchbar() {
   const { isSuggestionListOpen, queryKeyword } = useAppSelector(
     (state) => state.search
   );
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -64,7 +60,7 @@ export default function Searchbar() {
               onChange={handleOnChange}
               onFocus={handleOnFocus}
               className={Styles["input"]}
-              value={(queryKeyword as string) || undefined}
+              value={queryKeyword || undefined}
               type="text"
               placeholder="search keyword"
             />

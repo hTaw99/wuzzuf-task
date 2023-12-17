@@ -6,12 +6,12 @@ import {
   selectActualSkillById,
 } from "@/store/features/skillSlice";
 import { useEffect } from "react";
-import RelatedJobCard from "@/components/RelatedJobCard";
 import { fetchJobsByIds } from "@/store/features/jobsEntitySlice";
-import RelatedSkillsContainer from "@/components/RelatedSkillsContainer";
 import PageTitle from "@/components/utilities/PageTitle";
 import PageLeftContainer from "@/components/utilities/PageLeftContainer";
 import PageRightContainer from "@/components/utilities/PageRightContainer";
+import RelatedLink from "@/components/utilities/RelatedLink";
+import RelatedCard from "@/components/utilities/RelatedCard";
 
 export default function SkillDetailPage() {
   const { id } = useParams();
@@ -52,20 +52,23 @@ export default function SkillDetailPage() {
 
   return (
     <div>
-      <PageTitle isLoading={statusForSingleSkill === "loading"}>
-        {skill?.attributes?.name}
-      </PageTitle>
+      <PageTitle isLoading={!skill}>{skill?.attributes?.name}</PageTitle>
 
       <div className={Styles.container}>
+
         <PageLeftContainer containerTitle="Related jobs:">
-          {skill?.relationships?.jobs?.map((job) => (
-            <RelatedJobCard key={job} jobId={job} />
+          {skill?.relationships?.jobs?.map((jobId) => (
+            <RelatedCard dataId={jobId} forSkillOrJob="job" />
           ))}
         </PageLeftContainer>
 
+
         <PageRightContainer containerTitle="Related Skills:">
-          <RelatedSkillsContainer skillIdsArr={skill?.relationships?.skills} />
+          {skill?.relationships?.skills?.map((skillId) => (
+            <RelatedLink to={`/skill/${skillId}`} selectDataById={skillId} />
+          ))}
         </PageRightContainer>
+
       </div>
     </div>
   );

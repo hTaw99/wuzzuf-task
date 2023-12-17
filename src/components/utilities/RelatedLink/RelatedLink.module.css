@@ -1,0 +1,6 @@
+.link {
+  margin-bottom: 8px;
+  list-style: inside;
+  display: block;
+  text-decoration: underline;
+}

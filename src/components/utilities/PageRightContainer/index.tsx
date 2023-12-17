@@ -13,7 +13,7 @@ export default function PageRightContainer({
   return (
     <div className={Styles.right_container}>
       <h2 className={Styles.title}>{containerTitle}</h2>
-      <div>{children}</div>
+      <ul>{children}</ul>
     </div>
   );
 }

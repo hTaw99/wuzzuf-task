@@ -1,5 +1,5 @@
-import Skeleton from "@/components/RelatedSkillCard/Skeleton";
 import Styles from "./RelatedCard.module.css";
+import Skeleton from "./Skeleton";
 import { useAppSelector } from "@/hooks/hooks";
 import { selectActualSkillById } from "@/store/features/skillSlice";
 import { selectJobById } from "@/store/features/jobsEntitySlice";
@@ -14,6 +14,8 @@ export default function RelatedCard({
   dataId,
 }: TRelatedCardProp) {
   const job = useAppSelector((state) => selectJobById(state, dataId));
+  const { statusForSingleJob } = useAppSelector((state) => state.jobsEntity);
+  const { statusForSingleSkill } = useAppSelector((state) => state.skill);
   const skill = useAppSelector((state) => selectActualSkillById(state, dataId));
 
   //   const data = useAppSelector((state) => {
@@ -39,7 +41,11 @@ export default function RelatedCard({
     },
   ];
 
-  if (!job || !skill) {
+  if (
+    forSkillOrJob === "job"
+      ? statusForSingleSkill === "loading" || !job
+      : statusForSingleJob === "loading" || !skill
+  ) {
     return <Skeleton />;
   } else {
     return (

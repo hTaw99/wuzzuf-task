@@ -8,7 +8,9 @@ type TPageTitleProp = {
 
 export default function PageTitle({ isLoading, children }: TPageTitleProp) {
   return isLoading ? (
-    <div className={Styles.page_title_skeleton} />
+    <div
+      className={`${Styles.page_title_skeleton} ${Styles.backgroundColorAnimation}`}
+    />
   ) : (
     <h1 className={Styles.title}>{children}</h1>
   );

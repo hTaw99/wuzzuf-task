@@ -1,6 +1,5 @@
 import { useAppSelector } from "@/hooks/hooks";
 import Styles from "./History.module.css";
-import SingleRelatedSkill from "../RelatedSkillsContainer/SingleRelatedSkill";
 import { Link } from "react-router-dom";
 
 export default function History() {

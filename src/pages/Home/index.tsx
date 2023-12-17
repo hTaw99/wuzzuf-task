@@ -1,17 +1,20 @@
-import Styles from "./Home.module.css";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { fetchAllJobs, selectAllJobs } from "@/store/features/jobsEntitySlice";
-import { useEffect } from "react";
+import {  useEffect } from "react";
 import JobCardsContainer from "@/components/JobCardsContainer";
 import Skeleton from "@/components/JobCard/Skeleton";
 import { fetchSkillsByIds } from "@/store/features/skillSlice";
 import { useIntersectionOvserver } from "@/hooks/useIntersectionObserver";
+import PageTitle from "@/components/utilities/PageTitle";
+import Error from "@/components/utilities/Error";
 
 export default function HomePage() {
   // ---------------------- Selectors --------------------------------
   const { statusForAllJobs, error, meta } = useAppSelector(
     (state) => state.jobsEntity
   );
+
+  console.log({ error });
   const { statusForMultipleSkills, uniqueSkillsIds } = useAppSelector(
     (state) => state.skill
   );
@@ -34,36 +37,31 @@ export default function HomePage() {
   }, [dispatch, statusForAllJobs, statusForMultipleSkills, uniqueSkillsIds]);
   // -------------------------------------------------------------------
 
-  let content;
-
-  !jobs
-    ? (content = (
-        <>
-          <h1 className={Styles.title}>All Jobs</h1>
-          <div
-            style={{
-              display: " grid",
-              gap: "32px",
-              gridTemplateColumns: "repeat(auto-fit, minmax(450px, 1fr))",
-              marginBottom: "64px",
-            }}
-          >
-            {[1, 1, 1, 1, 1].map((_, i) => (
-              <Skeleton key={i} />
-            ))}
-          </div>
-        </>
-      ))
-    : jobs
-    ? (content = (
-        <div>
-          <h1 className={Styles.title}>All Jobs ({jobs.length})</h1>
-          <JobCardsContainer />
+  return (
+    <>
+      <PageTitle
+        isLoading={Boolean(jobs.length === 0 && statusForAllJobs === "loading")}
+      >
+        All Jobs ({jobs.length})
+      </PageTitle>
+      {error && statusForAllJobs !== "loading" && (
+        <Error title={error as string} />
+      )}
+      {jobs.length === 0 && statusForAllJobs === "loading" && (
+        <div
+          style={{
+            display: " grid",
+            gap: "32px",
+            gridTemplateColumns: "repeat(auto-fit, minmax(450px, 1fr))",
+            marginBottom: "64px",
+          }}
+        >
+          {[1, 1, 1, 1, 1, 1].map((_, i) => (
+            <Skeleton key={i} />
+          ))}
         </div>
-      ))
-    : error
-    ? (content = <h1>{"error as string"}</h1>)
-    : undefined;
-
-  return content;
+      )}
+      {jobs && <JobCardsContainer />}
+    </>
+  );
 }

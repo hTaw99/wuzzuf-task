@@ -1,39 +1,32 @@
 import Styles from "./Search.module.css";
-import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
-import useDebounce from "@/hooks/useDebounce";
+import { useAppSelector } from "@/hooks/hooks";
 import SearchResult from "@/components/SearchResult";
-import History from "@/components/History";
-import { useSearchParams } from "react-router-dom";
-
-// import { useSearchParams } from "react-router-dom";
+import PageTitle from "@/components/utilities/PageTitle";
+import PageRightContainer from "@/components/utilities/PageRightContainer";
+import RelatedLink from "@/components/utilities/RelatedLink";
 
 export default function SearchPage() {
-  const { queryKeyword } = useAppSelector((state) => state.search);
-  // const [searchParams, setSearchParams] = useSearchParams();
-  // const dispatch = useAppDispatch();
-
-  const debouncedValue = useDebounce(queryKeyword, 700);
-
-  // useEffect(() => {
-  //   if (debouncedValue && debouncedValue?.length >= 3) {
-  //     dispatch(fetchSearchedJobs(debouncedValue as string));
-  //   }
-  // }, [debouncedValue]);
-
+  const { queryKeyword, status } = useAppSelector((state) => state.search);
   const { searchResultJobs } = useAppSelector((state) => state.search);
+  const { searchHistory } = useAppSelector((state) => state.search);
 
   return (
     <div style={{ minHeight: "100vh" }}>
       {/* ---------------- Title Page ------------------ */}
-      <h1 className={Styles.title}>
+      <PageTitle isLoading={Boolean(status === "loading")}>
         “{queryKeyword}” jobs (
-        {queryKeyword?.length >= 3 ? searchResultJobs?.length : 0})
-      </h1>
+        {queryKeyword!.length >= 3 ? searchResultJobs?.length : 0})
+      </PageTitle>
 
       {/* ---------------- Container ------------------ */}
       <div className={Styles.container}>
-        <SearchResult debouncedValue={debouncedValue} />
-        <History />
+        <SearchResult />
+
+        <PageRightContainer containerTitle="History">
+          {searchHistory?.map((job) => (
+            <RelatedLink to={`/job/${job?.id}`} title={job?.title} />
+          ))}
+        </PageRightContainer>
       </div>
     </div>
   );

@@ -1,48 +1,19 @@
-import {
-  PayloadAction,
-  createAsyncThunk,
-  createSelector,
-  createSlice,
-  current,
-} from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getSearchedJobs } from "@/api/apiClient";
-import { fetchAllJobs } from "./jobsEntitySlice";
 import { fetchSkillsByIds } from "./skillSlice";
+import { TData, TJobEntity, TMeta } from "@/types/jobsTypes";
 
 // -------------------------------------------------------
-
-type TData = {
-  data: {
-    jobs: TJob[];
-    meta: TMeta;
-  };
-};
-
-type TMeta = {
-  next?: number;
-  count: number;
-};
-
-type TSkill = {
-  id: string;
-};
-
-type TJob = {
-  attributes: { title: string };
-  id: string;
-  relationships: { skills: TSkill[] };
-  type: string;
-};
 
 interface InitialState {
   error: unknown;
   status: "idle" | "success" | "loading" | "failed";
-  searchResultJobs: TJob[];
+  searchResultJobs: TJobEntity[];
   queryKeyword: string | null;
   meta: TMeta;
   suggestion: string[];
   isSuggestionListOpen: boolean;
-  searchHistory: [];
+  searchHistory: TJobEntity[];
 }
 
 // -----------------------------------------------------------------------
@@ -95,12 +66,12 @@ const searchSlice = createSlice({
     clearSuggestion(state) {
       state.suggestion = [];
     },
-    setAsViewedJob(state, { payload }) {
+    setAsViewedJob(state, action: PayloadAction<TJobEntity>) {
+      const { payload } = action;
       const viewedJob = state.searchHistory.find(
         (job) => job.id === payload.id
       );
       if (viewedJob) {
-        // viewedJob.views += 1;
         const viewedJobIdx = state.searchHistory.indexOf(viewedJob);
         state.searchHistory.splice(viewedJobIdx, 1);
         state.searchHistory.unshift(viewedJob);
@@ -119,10 +90,7 @@ const searchSlice = createSlice({
     builder.addCase(
       fetchSearchedJobs.fulfilled,
       (state, action: PayloadAction<TData>) => {
-        // const button = action.meta.arg.button;
-
         state.status = "success";
-        // if (button) {
         state.searchResultJobs = action.payload.data.jobs.map((job) => {
           return {
             id: job.id,
@@ -131,12 +99,6 @@ const searchSlice = createSlice({
             skillsId: job.relationships.skills.map((skill) => skill.id),
           };
         });
-        // } else {
-        // const suggestionJobTitle = action.payload.data.jobs.map(
-        //   (job) => job.attributes.title
-        // );
-        // state.suggestion = suggestionJobTitle;
-        // }
         state.meta = action.payload.data.meta;
       }
     );
