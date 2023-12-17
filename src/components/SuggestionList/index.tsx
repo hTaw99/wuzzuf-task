@@ -35,8 +35,8 @@ export default memo(function SuggestionList() {
       {isSuggestionListOpen && (
         <div className={Styles.container}>
           <ul>
-            {searchResultJobs.length === 0 || queryKeyword!.length < 3 ? (
-              queryKeyword!.length > 3 ? (
+            {searchResultJobs.length === 0 || queryKeyword?.length < 3 ? (
+              queryKeyword?.length > 3 ? (
                 <h3>Not found result</h3>
               ) : (
                 <>

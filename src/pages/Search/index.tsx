@@ -15,7 +15,7 @@ export default function SearchPage() {
       {/* ---------------- Title Page ------------------ */}
       <PageTitle isLoading={Boolean(status === "loading")}>
         “{queryKeyword}” jobs (
-        {queryKeyword!.length >= 3 ? searchResultJobs?.length : 0})
+        {queryKeyword?.length >= 3 ? searchResultJobs?.length : 0})
       </PageTitle>
 
       {/* ---------------- Container ------------------ */}

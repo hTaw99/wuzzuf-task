@@ -8,10 +8,14 @@ import { getSkillsByIds } from "@/api/apiClient";
 import { RootState } from "..";
 import { fetchAllJobs, fetchJobsByIds } from "./jobsEntitySlice";
 import { TSingleSkill, TSkillEntity } from "@/types/skillTypes";
+import { TJobEntity } from "@/types/jobsTypes";
 
 // ----------------------------------------------------------------------
 
 const skillsAdapter = createEntityAdapter<TSkillEntity>({});
+const skillJobsAdapter = createEntityAdapter<TJobEntity>({});
+
+// ids: [], entities: {skillId: [TEntityJob]}
 
 // -----------------------------------------------------------------------------------
 
@@ -53,8 +57,9 @@ interface InitialState {
   error: unknown;
   statusForMultipleSkills: "idle" | "success" | "loading" | "failed";
   statusForSingleSkill: "idle" | "success" | "loading" | "failed";
-  skills: EntityState<TSkillEntity, string>;
   uniqueSkillsIds: string[];
+  skills: EntityState<TSkillEntity, string>;
+  skillJobs: EntityState<TJobEntity, string>;
 }
 
 const initialState: InitialState = {
@@ -63,6 +68,7 @@ const initialState: InitialState = {
   statusForMultipleSkills: "idle",
   statusForSingleSkill: "idle",
   skills: skillsAdapter.getInitialState(),
+  skillJobs: skillJobsAdapter.getInitialState(),
 };
 
 const skillSlice = createSlice({
@@ -160,7 +166,26 @@ const skillSlice = createSlice({
       state.uniqueSkillsIds = uniqueSkillsArr;
     });
 
-    builder.addCase(fetchJobsByIds.fulfilled, (state) => {
+    builder.addCase(fetchJobsByIds.fulfilled, (state, action) => {
+      // const isForSingleFetch = action.meta.arg.length === 1;
+
+      // if (isForSingleFetch) {
+      //   let obj = {};
+
+      const arr = action.payload.map((job) => ({
+        id: job.data.job.id,
+        title: job.data.job.attributes.title,
+        skillsId: job.data.job.relationships.skills.map((skill) => skill.id),
+        type: job.data.job.type,
+      }));
+
+      //   obj[action.meta.arg[0]] = arr;
+
+      //   state.skillJobs = obj;
+      // }
+
+      skillJobsAdapter.addMany(state.skillJobs, arr);
+
       state.statusForMultipleSkills = "idle";
       state.statusForSingleSkill = "idle";
     });
@@ -173,6 +198,13 @@ export const {
   selectIds: selectActualSkillsIds,
   selectTotal: selectTotalNumber,
 } = skillsAdapter.getSelectors<RootState>((state) => state.skill.skills);
+
+export const {
+  selectAll: selectRelatedJobs,
+  selectById: selectRelatedJobById,
+  selectIds: selectRelatedJobsIds,
+  selectTotal: selectRelatedJobsTotalNumber,
+} = skillJobsAdapter.getSelectors<RootState>((state) => state.skill.skillJobs);
 
 // export const {} = jobSlice.actions;
 

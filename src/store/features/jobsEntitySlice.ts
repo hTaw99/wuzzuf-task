@@ -178,25 +178,24 @@ const jobsSlice = createSlice({
         state.statusForSingleJob = "success";
         state.statusForMultipleJobs = "idle";
         state.statusForAllJobs = "idle";
+        jobsAdapter.addOne(
+          state.jobs,
+          payload.map((job) => {
+            return {
+              id: job.data.job.id,
+              type: job.data.job.type,
+              title: job.data.job.attributes.title,
+              skillsId: job.data.job.relationships.skills.map(
+                (skill) => skill.id
+              ),
+            };
+          })[0]
+        );
       } else {
         state.statusForMultipleJobs = "success";
         state.statusForSingleJob = "idle";
         state.statusForAllJobs = "idle";
       }
-
-      jobsAdapter.addMany(
-        state.jobs,
-        payload.map((job) => {
-          return {
-            id: job.data.job.id,
-            type: job.data.job.type,
-            title: job.data.job.attributes.title,
-            skillsId: job.data.job.relationships.skills.map(
-              (skill) => skill.id
-            ),
-          };
-        })
-      );
     });
     builder.addCase(fetchJobsByIds.rejected, (state, action) => {
       const { payload } = action;

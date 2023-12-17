@@ -9,7 +9,7 @@ interface InitialState {
   error: unknown;
   status: "idle" | "success" | "loading" | "failed";
   searchResultJobs: TJobEntity[];
-  queryKeyword: string | null;
+  queryKeyword: string;
   meta: TMeta;
   suggestion: string[];
   isSuggestionListOpen: boolean;
@@ -40,7 +40,7 @@ export const fetchSearchedJobs = createAsyncThunk(
 
 const initialState: InitialState = {
   error: "",
-  queryKeyword: null,
+  queryKeyword: "",
   status: "idle",
   searchResultJobs: [],
   suggestion: [],

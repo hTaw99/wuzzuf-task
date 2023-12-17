@@ -1,8 +1,8 @@
 import Styles from "./RelatedCard.module.css";
 import Skeleton from "./Skeleton";
 import { useAppSelector } from "@/hooks/hooks";
-import { selectActualSkillById } from "@/store/features/skillSlice";
-import { selectJobById } from "@/store/features/jobsEntitySlice";
+import { selectActualSkillById, selectRelatedJobById } from "@/store/features/skillSlice";
+// import { selectJobById } from "@/store/features/jobsEntitySlice";
 
 type TRelatedCardProp = {
   dataId: string;
@@ -13,7 +13,7 @@ export default function RelatedCard({
   forSkillOrJob,
   dataId,
 }: TRelatedCardProp) {
-  const job = useAppSelector((state) => selectJobById(state, dataId));
+  const job = useAppSelector((state) => selectRelatedJobById(state, dataId));
   const { statusForSingleJob } = useAppSelector((state) => state.jobsEntity);
   const { statusForSingleSkill } = useAppSelector((state) => state.skill);
   const skill = useAppSelector((state) => selectActualSkillById(state, dataId));

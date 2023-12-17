@@ -39,8 +39,8 @@ export default function SearchResult() {
     statusForMultipleSkills,
   ]);
 
-  return searchResultJobs?.length === 0 || queryKeyword!.length < 3 ? (
-    queryKeyword!.length > 3 ? (
+  return searchResultJobs?.length === 0 || queryKeyword?.length < 3 ? (
+    queryKeyword?.length > 3 ? (
       <div
         style={{
           //   backgroundColor: "red",
